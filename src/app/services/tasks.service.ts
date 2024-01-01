@@ -52,4 +52,16 @@ export class TasksService {
         })
       );
   }
+
+  removeTask(task: Task): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${task.date}/${task.id}.json`);
+  }
+
+  getAll(): Observable<string[]> {
+    return this.http.get<any>(`${this.url}.json`).pipe(
+      map((date) => {
+        return Object.keys(date);
+      })
+    );
+  }
 }

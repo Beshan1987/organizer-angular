@@ -3,6 +3,7 @@ import moment, { Moment } from 'moment';
 import { DateService } from '../../services/date.service';
 import { CommonModule } from '@angular/common';
 import { MomentPipe } from '../../services/pipe.pipe';
+import { TasksService } from '../../services/tasks.service';
 
 interface Day {
   value: Moment;
@@ -24,10 +25,14 @@ interface Week {
 })
 export class CalendarComponent {
   calendar: Week[] = [];
+  hasTask: Boolean = false;
+  tasksDate: string[] = [];
 
   dateService = inject(DateService);
+  tasksService = inject(TasksService);
   constructor() {
     this.dateService.date.subscribe(this.generate.bind(this));
+    this.tasksService.getAll().subscribe((res) => (this.tasksDate = res));
   }
 
   generate(now: Moment) {

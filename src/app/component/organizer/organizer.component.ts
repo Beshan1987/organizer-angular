@@ -54,5 +54,9 @@ export class OrganizerComponent {
       (err) => err
     );
   }
-  removeTask(task: Task) {}
+  removeTask(task: Task) {
+    this.taskService.removeTask(task).subscribe(() => {
+      this.tasks = this.tasks.filter((tas) => tas.id !== task.id);
+    });
+  }
 }
