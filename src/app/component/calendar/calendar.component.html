@@ -12,10 +12,9 @@
     </thead>
     <tbody>
         <tr *ngFor="let week of calendar">
-            <td *ngFor="let day of week.days" [class.disabled]="day.disabled" (click)="selectDay(day.value)"
-                [class.hasTask]="tasksDate.includes(day.value.format('DD-MM-YYYY'))">
-                <span [class.selected]="day.selected" [class.active]="day.active"> {{day.value | moment:'ddd DD'}}
-                </span>
+            <td *ngFor="let day of week.days" [class.disabled]="day.disabled" (click)="selectDay(day.value)">
+                <span [class.selected]="day.selected" [class.active]="day.active"> {{day.value | moment:'DD'}} </span>
+                <div *ngIf="tasksDate.includes(day.value.format('DD-MM-YYYY'))" class="isTasks"></div>
             </td>
         </tr>
     </tbody>

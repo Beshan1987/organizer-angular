@@ -6,11 +6,12 @@ table {
   td,
   th {
     border: 1px solid #000;
-    padding: 0.5rem 1rem;
+    padding: 1% 2%;
   }
 
   td {
     text-align: center;
+    position: relative;
     &.disabled {
       opacity: 0.5;
     }
@@ -29,6 +30,17 @@ table {
   .selected {
     color: blue;
   }
+
+  .isTasks {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    bottom: 5px;
+    right: 5px;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+  }
+
   .hasTask {
     background-color: #666;
   }

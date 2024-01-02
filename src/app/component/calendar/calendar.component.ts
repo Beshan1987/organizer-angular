@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import moment, { Moment } from 'moment';
 import { DateService } from '../../services/date.service';
 import { CommonModule } from '@angular/common';
@@ -26,13 +26,13 @@ interface Week {
 export class CalendarComponent {
   calendar: Week[] = [];
   hasTask: Boolean = false;
-  tasksDate: string[] = [];
+  @Input() tasksDate!: string[];
 
   dateService = inject(DateService);
   tasksService = inject(TasksService);
   constructor() {
     this.dateService.date.subscribe(this.generate.bind(this));
-    this.tasksService.getAll().subscribe((res) => (this.tasksDate = res));
+    // this.tasksService.getAll().subscribe((res) => (this.tasksDate = res));
   }
 
   generate(now: Moment) {

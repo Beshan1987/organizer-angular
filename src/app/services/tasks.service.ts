@@ -60,7 +60,7 @@ export class TasksService {
   getAll(): Observable<string[]> {
     return this.http.get<any>(`${this.url}.json`).pipe(
       map((date) => {
-        return Object.keys(date);
+        return date ? Object.keys(date) : [];
       })
     );
   }
