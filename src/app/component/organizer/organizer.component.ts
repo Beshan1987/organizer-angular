@@ -9,9 +9,10 @@ import {
 } from '@angular/forms';
 import { Task, TasksService } from '../../services/tasks.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { switchMap } from 'rxjs';
+import { switchMap, timeout } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CalendarComponent } from '../calendar/calendar.component';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-organizer',
@@ -32,6 +33,7 @@ export class OrganizerComponent {
   dateOfTask = '';
   tasks: Task[] = [];
   dates: string[] = [];
+  toastr: ToastrService = inject(ToastrService);
 
   form: FormGroup = new FormGroup({
     task: new FormControl('', Validators.required),
@@ -60,12 +62,14 @@ export class OrganizerComponent {
       (task) => {
         this.tasks.push(task), this.form.reset();
         this.taskService.getAll().subscribe((res) => (this.dates = res));
+        this.toastr.success('Task added');
       },
       (err) => err
     );
   }
   removeTask(task: Task) {
     this.taskService.removeTask(task).subscribe(() => {
+      this.toastr.warning('Task deleted');
       this.tasks = this.tasks.filter((tas) => tas.id !== task.id);
       this.taskService.getAll().subscribe((res) => (this.dates = res));
     });
