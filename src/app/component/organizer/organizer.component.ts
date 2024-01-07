@@ -13,6 +13,7 @@ import { switchMap, timeout } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { Toast, ToastrService } from 'ngx-toastr';
+import { Moment } from 'moment';
 
 @Component({
   selector: 'app-organizer',
@@ -56,6 +57,7 @@ export class OrganizerComponent {
     const taskForSending: Task = {
       task,
       date: this.dateService.date.value.format('DD-MM-YYYY'),
+      isDone: false,
     };
 
     this.taskService.generateTask(taskForSending).subscribe(
@@ -72,6 +74,15 @@ export class OrganizerComponent {
       this.toastr.warning('Task deleted');
       this.tasks = this.tasks.filter((tas) => tas.id !== task.id);
       this.taskService.getAll().subscribe((res) => (this.dates = res));
+    });
+  }
+  makeDone(task: Task) {
+    this.taskService.makeDone({ ...task, isDone: true }).subscribe(() => {
+      this.tasks = this.tasks.map((t) => {
+        if (t.id === task.id) {
+          return { ...t, isDone: true };
+        } else return t;
+      });
     });
   }
 }

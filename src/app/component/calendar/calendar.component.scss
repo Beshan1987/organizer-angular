@@ -44,4 +44,13 @@ table {
   .hasTask {
     background-color: #666;
   }
+  .isDone{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 5px;
+    right: 5px;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+  }
 }

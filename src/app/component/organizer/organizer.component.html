@@ -1,28 +1,38 @@
 <section>
-    <app-calendar [tasksDate]="dates" />
-    <header> Organizer: <strong> {{dateOfTask}}</strong>
-        <hr />
-    </header>
-    <main>
-        <ul *ngIf="tasks.length; else noTasks">
-            <li class="task" *ngFor="let task of tasks; let i = index">
-                <div>
-                    <span>{{i+1}}</span>
-                    <span>{{task.task}}</span>
-                </div>
-                <button class="btn btn-primary" (click)="removeTask(task)">Remove</button>
-            </li>
-        </ul>
-        <ng-template #noTasks>
-            <p>No tasks yet</p>
-        </ng-template>
-        <footer>
-            <form (ngSubmit)="onSubmit()" [formGroup]="form">
-                <label for="deal">
-                    <input type="text" id="deal" formControlName="task">
-                </label>
-                <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid">ADD</button>
-            </form>
-        </footer>
-    </main>
+  <app-calendar [tasksDate]="dates" [tasks]="tasks" />
+  <header>
+    Organizer: <strong> {{ dateOfTask }}</strong>
+    <hr />
+  </header>
+  <main>
+    <ul *ngIf="tasks.length; else noTasks">
+      <li class="task" *ngFor="let task of tasks; let i = index">
+        <div>
+          <span>{{ i + 1 }}. </span>
+          <span [class.done]="task.isDone">{{ task.task }}</span>
+        </div>
+        <button class="btn btn-primary" (click)="makeDone(task)">Done</button>
+        <button class="btn btn-primary" (click)="removeTask(task)">
+          Remove
+        </button>
+      </li>
+    </ul>
+    <ng-template #noTasks>
+      <p>No tasks yet</p>
+    </ng-template>
+    <footer>
+      <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <label for="deal">
+          <input type="text" id="deal" formControlName="task" />
+        </label>
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="form.invalid"
+        >
+          ADD
+        </button>
+      </form>
+    </footer>
+  </main>
 </section>

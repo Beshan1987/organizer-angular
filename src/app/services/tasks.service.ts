@@ -7,6 +7,7 @@ export interface Task {
   id?: string;
   task: string;
   date?: string;
+  isDone: boolean;
 }
 
 export interface CreateResponse {
@@ -62,6 +63,13 @@ export class TasksService {
       map((date) => {
         return date ? Object.keys(date) : [];
       })
+    );
+  }
+
+  makeDone(task: Task): Observable<any> {
+    return this.http.patch<any>(
+      `${this.url}/${task.date}/${task.id}.json`,
+      task
     );
   }
 }
