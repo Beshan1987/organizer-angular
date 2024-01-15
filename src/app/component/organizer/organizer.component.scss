@@ -7,14 +7,23 @@ section {
   .task {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     padding: 0.5rem 1rem;
     border: 1px solid #000;
     margin-bottom: 0.5rem;
     flex-wrap: wrap;
   }
+  .input {
+    width: 20%;
+  }
 
-  .done{
+  .done {
     text-decoration: line-through;
+  }
+  span:hover {
+    cursor: pointer;
+  }
+  .w100 {
+    width: 100%;
   }
 }

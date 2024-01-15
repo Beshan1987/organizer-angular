@@ -3,6 +3,7 @@
 
 :root {
   --primary-color: #dc3545;
+  --green-color: rgb(29, 188, 29);
   --dark-color: #333333;
   --light-color: #f4f4f4;
 }
@@ -82,6 +83,11 @@ table th {
 
 .btn-primary {
   background-color: var(--primary-color);
+  color: #fff;
+}
+
+.btn-secondary {
+  background-color: var(--green-color);
   color: #fff;
 }
 

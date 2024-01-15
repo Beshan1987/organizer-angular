@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { ComponentFactoryResolver, Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { Observable, map } from 'rxjs';
 
@@ -71,5 +71,15 @@ export class TasksService {
       `${this.url}/${task.date}/${task.id}.json`,
       task
     );
+  }
+  changeTask(task: Task): Observable<void> {
+    return this.http.patch<void>(
+      `${this.url}/${task.date}/${task.id}.json`,
+      task
+    );
+  }
+
+  getAllTasksCalendar(): Observable<any> {
+    return this.http.get<any>(`${this.url}.json`);
   }
 }

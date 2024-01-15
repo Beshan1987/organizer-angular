@@ -27,13 +27,14 @@ export class CalendarComponent {
   calendar: Week[] = [];
   hasTask: Boolean = false;
   @Input() tasksDate!: string[];
-  @Input() tasks!: Task[]
+  @Input() tasks!: Task[];
 
   dateService = inject(DateService);
   tasksService = inject(TasksService);
   constructor() {
     this.dateService.date.subscribe(this.generate.bind(this));
     // this.tasksService.getAll().subscribe((res) => (this.tasksDate = res));
+    console.log(this.tasksDate);
   }
 
   generate(now: Moment) {

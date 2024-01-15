@@ -9,12 +9,35 @@
       <li class="task" *ngFor="let task of tasks; let i = index">
         <div>
           <span>{{ i + 1 }}. </span>
-          <span [class.done]="task.isDone">{{ task.task }}</span>
+
+          <div (click)="toggleTask(task.id)">
+            <div *ngIf="idChange !== task.id; else showInput">
+              <span [class.done]="task.isDone">{{ task.task }}</span>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-primary" (click)="makeDone(task)">Done</button>
-        <button class="btn btn-primary" (click)="removeTask(task)">
-          Remove
-        </button>
+        <ng-template #showInput>
+          <form (ngSubmit)="onSubmitChange(task)" [formGroup]="form">
+            <input
+              type="text"
+              [defaultValue]="task.task"
+              formControlName="task"
+            />
+
+            <button class="btn btn-secondary w100">Change</button>
+          </form>
+        </ng-template>
+        <div *ngIf="idChange === task.id">
+          <button class="btn btn-primary" (click)="cancel()">
+            Cancel changes
+          </button>
+        </div>
+        <div *ngIf="idChange !== task.id">
+          <button class="btn btn-primary" (click)="makeDone(task)">Done</button>
+          <button class="btn btn-primary" (click)="removeTask(task)">
+            Remove
+          </button>
+        </div>
       </li>
     </ul>
     <ng-template #noTasks>
