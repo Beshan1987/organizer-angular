@@ -14,6 +14,10 @@ import { CommonModule } from '@angular/common';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Moment } from 'moment';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { TasksComponent } from '../tasks/tasks.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-organizer',
@@ -24,6 +28,10 @@ import { Moment } from 'moment';
     HttpClientModule,
     CommonModule,
     CalendarComponent,
+    MatTabsModule,
+    MatIconModule,
+    TasksComponent,
+    MatButtonModule,
   ],
   templateUrl: './organizer.component.html',
   styleUrl: './organizer.component.scss',
@@ -36,10 +44,25 @@ export class OrganizerComponent {
   dates: string[] = [];
   toastr: ToastrService = inject(ToastrService);
   idChange = '';
+  totalSum = 0;
   form: FormGroup = new FormGroup({
     task: new FormControl('', Validators.required),
   });
   taskCakendar: Task[] = [];
+
+  formShopping: FormGroup = new FormGroup({
+    task: new FormControl('', Validators.required),
+    price: new FormControl('', Validators.required),
+  });
+
+  // countTotalSum() {
+  //   return this.tasks.reduce((acc, item) => {
+  //     if (item.sum) {
+  //       acc += item.sum;
+  //     }
+  //     return acc;
+  //   }, 0);
+  // }
 
   constructor() {
     this.dateService.date.subscribe((date) => {
@@ -57,6 +80,13 @@ export class OrganizerComponent {
       .subscribe((res) => {
         this.tasks = res;
         console.log(res);
+        this.totalSum = res.reduce((acc, item) => {
+          if (item.sum) {
+            acc += item.sum;
+          }
+
+          return acc;
+        }, 0);
       });
   }
 
@@ -97,15 +127,46 @@ export class OrganizerComponent {
         this.tasks.push(task), this.form.reset();
         this.taskService.getAll().subscribe((res) => (this.dates = res));
         this.toastr.success('Task added');
+        if (task.sum) {
+          this.totalSum += task.sum;
+        }
       },
       (err) => err
     );
   }
+
+  onSubmitShop() {
+    const { task, price } = this.formShopping.value;
+
+    const taskForSending: Task = {
+      task,
+      date: this.dateService.date.value.format('DD-MM-YYYY'),
+      isDone: false,
+      sum: price,
+    };
+
+    this.taskService.generateTask(taskForSending).subscribe(
+      (task) => {
+        console.log('shop');
+        this.tasks.push(task), this.formShopping.reset();
+        this.taskService.getAll().subscribe((res) => (this.dates = res));
+        this.toastr.success('Task added');
+        if (task.sum) {
+          this.totalSum += task.sum;
+        }
+      },
+      (err) => err
+    );
+  }
+
   removeTask(task: Task) {
     this.taskService.removeTask(task).subscribe(() => {
       this.toastr.warning('Task deleted');
       this.tasks = this.tasks.filter((tas) => tas.id !== task.id);
       this.taskService.getAll().subscribe((res) => (this.dates = res));
+      if (task.sum) {
+        this.totalSum -= task.sum;
+      }
     });
   }
 

@@ -12,5 +12,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(HttpClientModule),
     provideAnimations(),
     provideToastr({ timeOut: 1000 }),
-  ],
+    provideAnimations()
+],
 };

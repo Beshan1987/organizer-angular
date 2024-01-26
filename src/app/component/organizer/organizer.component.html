@@ -2,60 +2,193 @@
   <app-calendar [tasksDate]="dates" [tasks]="tasks" />
   <header>
     Organizer: <strong> {{ dateOfTask }}</strong>
-    <hr />
   </header>
   <main>
-    <ul *ngIf="tasks.length; else noTasks">
-      <li class="task" *ngFor="let task of tasks; let i = index">
-        <div>
-          <span>{{ i + 1 }}. </span>
-
-          <div (click)="toggleTask(task.id)">
-            <div *ngIf="idChange !== task.id; else showInput">
-              <span [class.done]="task.isDone">{{ task.task }}</span>
-            </div>
-          </div>
-        </div>
-        <ng-template #showInput>
-          <form (ngSubmit)="onSubmitChange(task)" [formGroup]="form">
-            <input
-              type="text"
-              [defaultValue]="task.task"
-              formControlName="task"
-            />
-
-            <button class="btn btn-secondary w100">Change</button>
-          </form>
+    <mat-tab-group class="tabsGroup">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon icon"> today</mat-icon>
+          Daily
         </ng-template>
-        <div *ngIf="idChange === task.id">
-          <button class="btn btn-primary" (click)="cancel()">
-            Cancel changes
+        <ul *ngIf="tasks.length; else noTasks" class="wrapper">
+          <li *ngFor="let task of tasks; let i = index">
+            <div *ngIf="!task.sum" class="task">
+              <div class="taskWrapper">
+                <span>№{{ i + 1 }}. </span>
+
+                <div (click)="toggleTask(task.id)">
+                  <div *ngIf="idChange !== task.id; else showInput">
+                    <span [class.done]="task.isDone">{{ task.task }}</span>
+                    <span [class.done]="task.isDone">{{ task.task }}</span>
+                  </div>
+                </div>
+                <div *ngIf="task.isDone">
+                  <span class="material-symbols-outlined doneIcon"> Done </span>
+                </div>
+              </div>
+
+              <ng-template #showInput>
+                <form (ngSubmit)="onSubmitChange(task)" [formGroup]="form">
+                  <input
+                    type="text"
+                    [defaultValue]="task.task"
+                    formControlName="task"
+                  />
+
+                  <button class="btn btn-secondary w100">Change</button>
+                </form>
+              </ng-template>
+              <div *ngIf="idChange === task.id">
+                <button class="btn btn-primary" (click)="cancel()">
+                  Cancel changes
+                </button>
+              </div>
+              <div *ngIf="idChange !== task.id" class="buttonWrapper">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="task.isDone"
+                  (click)="makeDone(task)"
+                >
+                  Done
+                </button>
+                <div class="example-button-container">
+                  <button
+                    mat-fab
+                    color="warn"
+                    aria-label="Example icon button with a delete icon"
+                    (click)="removeTask(task)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ng-template #noTasks>
+          <p class="noTaskContainer">No tasks yet...</p>
+        </ng-template>
+        <form (ngSubmit)="onSubmit()" [formGroup]="form">
+          <label for="deal">
+            <input type="text" id="deal" formControlName="task" />
+          </label>
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="form.invalid"
+          >
+            ADD
           </button>
-        </div>
-        <div *ngIf="idChange !== task.id">
-          <button class="btn btn-primary" (click)="makeDone(task)">Done</button>
-          <button class="btn btn-primary" (click)="removeTask(task)">
-            Remove
+        </form>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon icon"> shopping_cart </mat-icon>
+          Shopping
+        </ng-template>
+        <ul *ngIf="tasks.length; else noTasks" class="wrapper">
+          <li *ngFor="let task of tasks; let i = index">
+            <div *ngIf="task.sum" class="task">
+              <div class="taskWrapper">
+                <span>№{{ i + 1 }}. </span>
+
+                <div (click)="toggleTask(task.id)">
+                  <div
+                    *ngIf="idChange !== task.id; else showInput"
+                    class="taskShop"
+                  >
+                    <span [class.done]="task.isDone">{{ task.task }}</span>
+                    <span [class.done]="task.isDone">sum: {{ task.sum }}</span>
+                  </div>
+                </div>
+                <div *ngIf="task.isDone">
+                  <span class="material-symbols-outlined doneIcon"> Done </span>
+                </div>
+              </div>
+
+              <ng-template #showInput>
+                <form (ngSubmit)="onSubmitChange(task)" [formGroup]="form">
+                  <input
+                    type="text"
+                    [defaultValue]="task.task"
+                    formControlName="task"
+                  />
+
+                  <button class="btn btn-secondary w100">Change</button>
+                </form>
+              </ng-template>
+              <div *ngIf="idChange === task.id">
+                <button class="btn btn-primary" (click)="cancel()">
+                  Cancel changes
+                </button>
+              </div>
+              <div *ngIf="idChange !== task.id" class="buttonWrapper">
+                <button
+                  [disabled]="task.isDone"
+                  mat-raised-button
+                  color="primary"
+                  (click)="makeDone(task)"
+                >
+                  Bought
+                </button>
+                <div class="example-button-container">
+                  <button
+                    mat-fab
+                    color="warn"
+                    aria-label="Example icon button with a delete icon"
+                    (click)="removeTask(task)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          <span class="sumContainer"
+            >Total sum:
+            <b style="color: darkviolet">&nbsp; {{ totalSum }} &nbsp;</b>
+            BYN</span
+          >
+        </ul>
+
+        <form (ngSubmit)="onSubmitShop()" [formGroup]="formShopping">
+          <label for="deal">
+            Goods name:
+            <input type="text" id="deal" formControlName="task" />
+          </label>
+          <label for="price">
+            Price, sum:
+            <input type="number" id="price" formControlName="price" />
+          </label>
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="formShopping.invalid"
+          >
+            ADD
           </button>
-        </div>
-      </li>
-    </ul>
-    <ng-template #noTasks>
-      <p>No tasks yet</p>
-    </ng-template>
-    <footer>
-      <form (ngSubmit)="onSubmit()" [formGroup]="form">
-        <label for="deal">
-          <input type="text" id="deal" formControlName="task" />
-        </label>
-        <button
-          type="submit"
-          class="btn btn-primary btn-block"
-          [disabled]="form.invalid"
-        >
-          ADD
-        </button>
-      </form>
-    </footer>
+        </form>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon icon"> grain </mat-icon>
+          Others
+        </ng-template>
+        <form (ngSubmit)="onSubmit()" [formGroup]="form">
+          <label for="deal">
+            <input type="text" id="deal" formControlName="task" />
+          </label>
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="form.invalid"
+          >
+            ADD
+          </button>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+    <footer></footer>
   </main>
 </section>

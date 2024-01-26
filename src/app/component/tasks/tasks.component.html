@@ -1,0 +1,39 @@
+<ul *ngIf="tasks.length; else noTasks" class="wrapper">
+  <li class="task" *ngFor="let task of tasks; let i = index">
+    <div class="taskWrapper">
+      <span>№{{ i + 1 }}. </span>
+
+      <div (click)="toggleTask(task.id)">
+        <div *ngIf="idChange !== task.id; else showInput">
+          <span [class.done]="task.isDone">{{ task.task }}</span>
+        </div>
+      </div>
+      <div *ngIf="task.isDone">
+        <span class="material-symbols-outlined doneIcon"> Done </span>
+      </div>
+    </div>
+    <ng-template #showInput>
+      <form (ngSubmit)="onSubmitChange(task)" [formGroup]="form">
+        <input type="text" [defaultValue]="task.task" formControlName="task" />
+
+        <button class="btn btn-secondary w100">Change</button>
+      </form>
+    </ng-template>
+    <div *ngIf="idChange === task.id">
+      <button class="btn btn-primary" (click)="cancel()">Cancel changes</button>
+    </div>
+    <div *ngIf="idChange !== task.id">
+      <button
+        [disabled]="task.isDone"
+        class="btn btn-primary"
+        (click)="makeDone(task)"
+      >
+        Done
+      </button>
+      <button class="btn btn-primary" (click)="removeTask(task)">Remove</button>
+    </div>
+  </li>
+</ul>
+<ng-template #noTasks>
+  <p>No tasks yet</p>
+</ng-template>

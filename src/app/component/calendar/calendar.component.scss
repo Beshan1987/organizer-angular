@@ -33,18 +33,18 @@ table {
 
   .isTasks {
     position: absolute;
-    width: 10px;
-    height: 10px;
-    bottom: 5px;
-    right: 5px;
-    border-radius: 5px;
+    width: 6px;
+    height: 6px;
+    bottom: 2px;
+    right: 2px;
+    border-radius: 3px;
     background-color: var(--primary-color);
   }
 
   .hasTask {
     background-color: #666;
   }
-  .isDone{
+  .isDone {
     position: absolute;
     width: 10px;
     height: 10px;

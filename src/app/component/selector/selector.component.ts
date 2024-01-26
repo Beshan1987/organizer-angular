@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { DateService } from '../../services/date.service';
-import { Moment } from 'moment';
 
 @Component({
   selector: 'app-selector',
