@@ -99,7 +99,9 @@
                     class="taskShop"
                   >
                     <span [class.done]="task.isDone">{{ task.task }}</span>
-                    <span [class.done]="task.isDone">sum: {{ task.sum }}</span>
+                    <span [class.done]="task.isDone">
+                      - <b style="color: #673ab7">{{ task.sum }}</b> BYN</span
+                    >
                   </div>
                 </div>
                 <div *ngIf="task.isDone">
@@ -147,7 +149,7 @@
           </li>
           <span class="sumContainer"
             >Total sum:
-            <b style="color: darkviolet">&nbsp; {{ totalSum }} &nbsp;</b>
+            <b style="color: #673ab7">&nbsp; {{ totalSum }} &nbsp;</b>
             BYN</span
           >
         </ul>
