@@ -1,3 +1,8 @@
+.calendarPicker {
+  display: flex;
+  margin: 0 auto;
+}
+
 .calendarButton {
   padding: 5px;
   border: none;
@@ -8,6 +13,7 @@
 }
 
 table {
+  position: relative;
   width: 100%;
   margin-bottom: 1rem;
   border-collapse: collapse;
@@ -35,6 +41,7 @@ table {
   .active {
     color: var(--primary-color);
     font-weight: bold;
+    background-color: #e0d3d3cf;
   }
 
   .selected {
@@ -72,4 +79,8 @@ table {
 .calendarPicker {
   // height: 50px;
   // align-items: center;
+  display: none;
+  position: relative;
+  top: 100px;
+  width: 100%;
 }

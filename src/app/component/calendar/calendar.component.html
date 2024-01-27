@@ -2,7 +2,27 @@
 <button class="calendarButton" mat-raised-button (click)="picker.open()">
   <mat-icon> calendar_month </mat-icon>
 </button>
+
 <table>
+  <div class="calendarPicker">
+    <mat-form-field>
+      <mat-label>Choose a date</mat-label>
+      <input
+        matInput
+        [matDatepicker]="picker"
+        (dateInput)="selectDay($event.value)"
+      />
+      <mat-datepicker-toggle
+        matIconSuffix
+        [for]="picker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="example-events">
+      <div>{{ events }}</div>
+    </div>
+  </div>
   <thead>
     <tr>
       <th>Sun</th>
@@ -20,8 +40,9 @@
         *ngFor="let day of week.days"
         [class.disabled]="day.disabled"
         (click)="selectDay(day.value)"
+        [class.active]="day.active"
       >
-        <span [class.selected]="day.selected" [class.active]="day.active">
+        <span [class.selected]="day.selected">
           {{ day.value | moment : "DD" }}
         </span>
         <div
@@ -33,19 +54,3 @@
     </tr>
   </tbody>
 </table>
-<div>
-  <mat-form-field class="calendarPicker">
-    <mat-label>Choose a date</mat-label>
-    <input
-      matInput
-      [matDatepicker]="picker"
-      (dateInput)="selectDay($event.value)"
-    />
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-
-  <div class="example-events">
-    <div>{{ events }}</div>
-  </div>
-</div>

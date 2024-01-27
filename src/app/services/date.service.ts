@@ -18,6 +18,7 @@ export class DateService {
     const value = this.date.value.set({
       date: date.date(),
       month: date.month(),
+      year: date.year(),
     });
     this.date.next(value);
   }

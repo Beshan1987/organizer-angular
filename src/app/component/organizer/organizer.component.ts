@@ -167,7 +167,8 @@ export class OrganizerComponent {
       this.tasks = this.tasks.filter((tas) => tas.id !== task.id);
       this.taskService.getAll().subscribe((res) => (this.dates = res));
       if (task.totalSum) {
-        this.totalSum -= task.totalSum;
+        this.totalSum -= +task.totalSum;
+        this.totalSum = +this.totalSum.toFixed(2);
       }
     });
   }
