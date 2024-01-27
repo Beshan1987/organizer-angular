@@ -33,23 +33,19 @@
     </tr>
   </tbody>
 </table>
-<!-- <mat-form-field class="example-full-width">
-  <mat-label>Choose a date</mat-label>
-  <input matInput [matDatepicker]="picker" />
-  <mat-hint>MM/DD/YYYY</mat-hint>
-  <mat-datepicker #picker></mat-datepicker>
-</mat-form-field> -->
+<div>
+  <mat-form-field class="calendarPicker">
+    <mat-label>Choose a date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      (dateInput)="selectDay($event.value)"
+    />
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 
-<mat-form-field class="calendarPicker">
-  <input
-    matInput
-    [matDatepicker]="picker"
-    (dateInput)="selectDay($event.value)"
-  />
-  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker #picker></mat-datepicker>
-</mat-form-field>
-
-<div class="example-events">
-  <div>{{ events }}</div>
+  <div class="example-events">
+    <div>{{ events }}</div>
+  </div>
 </div>

@@ -14,7 +14,7 @@
           <li *ngFor="let task of tasks; let i = index">
             <div *ngIf="!task.sum" class="task">
               <div class="taskWrapper">
-                <span>№{{ i + 1 }}. </span>
+                <span>{{ i + 1 }}. </span>
 
                 <div (click)="toggleTask(task.id)">
                   <div *ngIf="idChange !== task.id; else showInput">
@@ -52,16 +52,14 @@
                 >
                   Done
                 </button>
-                <div class="example-button-container">
-                  <button
-                    mat-fab
-                    color="warn"
-                    aria-label="Example icon button with a delete icon"
-                    (click)="removeTask(task)"
-                  >
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
+                <button
+                  mat-mini-fab
+                  color="warn"
+                  aria-label="Example icon button with a plus one icon"
+                  (click)="removeTask(task)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
               </div>
             </div>
           </li>
@@ -91,17 +89,36 @@
           <li *ngFor="let task of tasks; let i = index">
             <div *ngIf="task.sum" class="task">
               <div class="taskWrapper">
-                <span>№{{ i + 1 }}. </span>
+                <span>{{ i + 1 }}. </span>
 
                 <div (click)="toggleTask(task.id)">
                   <div
                     *ngIf="idChange !== task.id; else showInput"
                     class="taskShop"
                   >
-                    <span [class.done]="task.isDone">{{ task.task }}</span>
-                    <span [class.done]="task.isDone">
-                      - <b style="color: #673ab7">{{ task.sum }}</b> BYN</span
+                    <span [class.done]="task.isDone"
+                      >{{ task.task
+                      }}<b
+                        *ngIf="task.amount && task.amount > 1"
+                        style="color: #673ab7"
+                      >
+                        {{ task.sum }} BYN (X{{ task.amount }})</b
+                      ></span
                     >
+                    <span [class.done]="task.isDone">
+                      <b
+                        *ngIf="task.totalSum; else elseSum"
+                        style="color: #673ab7"
+                        >{{ task.totalSum }}</b
+                      >
+                      BYN</span
+                    >
+                    <ng-template #elseSum>
+                      <span [class.done]="task.isDone">
+                        <b style="color: #673ab7">{{ task.sum }}</b>
+                        BYN</span
+                      >
+                    </ng-template>
                   </div>
                 </div>
                 <div *ngIf="task.isDone">
@@ -134,16 +151,14 @@
                 >
                   Bought
                 </button>
-                <div class="example-button-container">
-                  <button
-                    mat-fab
-                    color="warn"
-                    aria-label="Example icon button with a delete icon"
-                    (click)="removeTask(task)"
-                  >
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
+                <button
+                  mat-mini-fab
+                  color="warn"
+                  aria-label="Example icon button with a plus one icon"
+                  (click)="removeTask(task)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
               </div>
             </div>
           </li>
@@ -153,11 +168,19 @@
             BYN</span
           >
         </ul>
-
         <form (ngSubmit)="onSubmitShop()" [formGroup]="formShopping">
           <label for="deal">
-            Goods name:
+            Product name:
             <input type="text" id="deal" formControlName="task" />
+          </label>
+          <button type="button" (click)="toggleAmountInput()" class="btnAmount">
+            Amount
+            <mat-icon *ngIf="!isOpened">add</mat-icon>
+            <mat-icon *ngIf="isOpened">remove</mat-icon>
+          </button>
+          <label *ngIf="isOpened" for="amount">
+            amount
+            <input type="number" id="amount" formControlName="amount" />
           </label>
           <label for="price">
             Price, sum:

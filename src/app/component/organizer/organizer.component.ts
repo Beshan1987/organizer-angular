@@ -40,11 +40,12 @@ export class OrganizerComponent {
   dateService = inject(DateService);
   taskService = inject(TasksService);
   dateOfTask = '';
+  isOpened: Boolean = false;
   tasks: Task[] = [];
   dates: string[] = [];
   toastr: ToastrService = inject(ToastrService);
   idChange = '';
-  totalSum = 0;
+  totalSum: number = 0;
   form: FormGroup = new FormGroup({
     task: new FormControl('', Validators.required),
   });
@@ -53,16 +54,12 @@ export class OrganizerComponent {
   formShopping: FormGroup = new FormGroup({
     task: new FormControl('', Validators.required),
     price: new FormControl('', Validators.required),
+    amount: new FormControl(1, Validators.required),
   });
 
-  // countTotalSum() {
-  //   return this.tasks.reduce((acc, item) => {
-  //     if (item.sum) {
-  //       acc += item.sum;
-  //     }
-  //     return acc;
-  //   }, 0);
-  // }
+  toggleAmountInput() {
+    this.isOpened = !this.isOpened;
+  }
 
   constructor() {
     this.dateService.date.subscribe((date) => {
@@ -81,8 +78,8 @@ export class OrganizerComponent {
         this.tasks = res;
         console.log(res);
         this.totalSum = res.reduce((acc, item) => {
-          if (item.sum) {
-            acc += item.sum;
+          if (item.totalSum) {
+            acc += item.totalSum;
           }
 
           return acc;
@@ -127,8 +124,8 @@ export class OrganizerComponent {
         this.tasks.push(task), this.form.reset();
         this.taskService.getAll().subscribe((res) => (this.dates = res));
         this.toastr.success('Task added');
-        if (task.sum) {
-          this.totalSum += task.sum;
+        if (task.totalSum) {
+          this.totalSum += task.totalSum;
         }
       },
       (err) => err
@@ -136,23 +133,28 @@ export class OrganizerComponent {
   }
 
   onSubmitShop() {
-    const { task, price } = this.formShopping.value;
+    const { task, price, amount } = this.formShopping.value;
+    const titalSum = price * amount;
 
     const taskForSending: Task = {
       task,
       date: this.dateService.date.value.format('DD-MM-YYYY'),
       isDone: false,
       sum: price,
+      amount: amount,
+      totalSum: titalSum,
     };
 
     this.taskService.generateTask(taskForSending).subscribe(
       (task) => {
         console.log('shop');
         this.tasks.push(task), this.formShopping.reset();
+        this.formShopping.controls['amount'].reset(1);
         this.taskService.getAll().subscribe((res) => (this.dates = res));
         this.toastr.success('Task added');
-        if (task.sum) {
-          this.totalSum += task.sum;
+        this.isOpened = false;
+        if (task.totalSum) {
+          this.totalSum += task.totalSum;
         }
       },
       (err) => err
@@ -164,8 +166,8 @@ export class OrganizerComponent {
       this.toastr.warning('Task deleted');
       this.tasks = this.tasks.filter((tas) => tas.id !== task.id);
       this.taskService.getAll().subscribe((res) => (this.dates = res));
-      if (task.sum) {
-        this.totalSum -= task.sum;
+      if (task.totalSum) {
+        this.totalSum -= task.totalSum;
       }
     });
   }

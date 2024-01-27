@@ -9,6 +9,8 @@ export interface Task {
   date?: string;
   isDone: boolean;
   sum?: number;
+  amount?: number;
+  totalSum?: number;
 }
 
 export interface CreateResponse {

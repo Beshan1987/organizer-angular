@@ -6,6 +6,7 @@ section {
   }
   .wrapper {
     margin-top: 10px;
+
     .sumContainer {
       display: flex;
       justify-content: center;
@@ -23,9 +24,9 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1rem;
-    border: 1px solid #000;
-    margin-bottom: 0.5rem;
+    padding: 0.5rem 0;
+    // border: 1px solid #000;
+    // margin-bottom: 0.5rem;
     flex-wrap: wrap;
     .buttonWrapper {
       display: flex;
@@ -42,6 +43,14 @@ section {
       .taskShop {
         display: flex;
         gap: 10px;
+        span:first-child {
+          min-width: 100px;
+          max-width: 200px;
+          word-wrap: break-word;
+        }
+        span:nth-child(2) {
+          width: 70px;
+        }
       }
     }
   }
@@ -58,4 +67,23 @@ section {
   .w100 {
     width: 100%;
   }
+}
+
+.calendarButton {
+  .mat-icon {
+    margin: 0;
+  }
+}
+.mdc-button--raised {
+  padding: 0;
+}
+
+.btnAmount {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  border: none;
+  gap: 10px;
+  border-radius: 5px;
 }
