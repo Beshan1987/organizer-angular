@@ -4,6 +4,14 @@ import { DateService } from '../../services/date.service';
 import { CommonModule } from '@angular/common';
 import { MomentPipe } from '../../services/pipe.pipe';
 import { Task, TasksService } from '../../services/tasks.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatCardModule } from '@angular/material/card';
+import { SelectorComponent } from '../selector/selector.component';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 interface Day {
   value: Moment;
@@ -19,15 +27,38 @@ interface Week {
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, MomentPipe],
+  providers: [provideNativeDateAdapter()],
+  imports: [
+    CommonModule,
+    MomentPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatIconModule,
+    MatCardModule,
+    SelectorComponent,
+  ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
 })
 export class CalendarComponent {
   calendar: Week[] = [];
   hasTask: Boolean = false;
+  isOpened: Boolean = true;
+  selected: Date | null = null;
   @Input() tasksDate!: string[];
   @Input() tasks!: Task[];
+  events: Date | null = null;
+
+  addEvent(event: Date) {
+    this.events = event;
+    console.log(moment(this.events));
+  }
+
+  toggle() {
+    console.log(this.isOpened);
+    this.isOpened = !this.isOpened;
+  }
 
   dateService = inject(DateService);
   tasksService = inject(TasksService);
@@ -67,7 +98,9 @@ export class CalendarComponent {
     console.log(calendar);
   }
 
-  selectDay(day: Moment) {
-    this.dateService.changeDay(day);
+  selectDay(day: Moment | Date) {
+    if (day instanceof Date) {
+      this.dateService.changeDay(moment(day));
+    } else this.dateService.changeDay(day);
   }
 }

@@ -14,6 +14,7 @@ export class DateService {
     this.date.next(value);
   }
   changeDay(date: Moment) {
+    console.log(date);
     const value = this.date.value.set({
       date: date.date(),
       month: date.month(),

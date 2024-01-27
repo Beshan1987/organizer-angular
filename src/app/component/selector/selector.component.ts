@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { DateService } from '../../services/date.service';
 
 @Component({
@@ -9,8 +9,10 @@ import { DateService } from '../../services/date.service';
   styleUrl: './selector.component.scss',
 })
 export class SelectorComponent {
+  @Input() toggle!: () => void;
   dateService = inject(DateService);
   currentMonth: string = '';
+  isOpened: Boolean = false;
 
   constructor() {
     this.dateService.date.subscribe((res) => {
