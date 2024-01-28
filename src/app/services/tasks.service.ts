@@ -29,7 +29,6 @@ export class TasksService {
       .post<CreateResponse>(`${this.url}/${task.date}.json`, task)
       .pipe(
         map((res) => {
-          console.log(res);
           return { ...task, id: res.name };
         })
       );
@@ -43,12 +42,6 @@ export class TasksService {
           if (!tasks) {
             return [];
           }
-          console.log(
-            Object.keys(tasks).map((key) => ({
-              ...tasks[key as any],
-              id: key,
-            }))
-          );
           return Object.keys(tasks).map((key) => ({
             ...tasks[key as any],
             id: key,

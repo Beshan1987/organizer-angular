@@ -67,7 +67,6 @@ export class OrganizerComponent {
     });
     this.taskService.getAll().subscribe((res) => {
       this.dates = res;
-      console.log(res);
     });
 
     this.taskService.getAllTasksCalendar().subscribe((res) => console.log(res));
@@ -76,7 +75,6 @@ export class OrganizerComponent {
       .pipe(switchMap((value) => this.taskService.getAllTasks(value)))
       .subscribe((res) => {
         this.tasks = res;
-        console.log(res);
         this.totalSum = res.reduce((acc, item) => {
           if (item.totalSum) {
             acc += item.totalSum;
@@ -88,22 +86,51 @@ export class OrganizerComponent {
   }
 
   onSubmitChange(task: Task) {
-    const taskValue = this.form.value.task;
-    const taskForSending: Task = {
-      ...task,
-      task: taskValue,
-    };
-    console.log(taskForSending);
-    this.taskService.changeTask(taskForSending).subscribe(() => {
-      this.idChange = '';
-      this.form.reset();
-      this.tasks = this.tasks.map((t) => {
-        if (t.id === task.id) {
-          console.log({ ...taskForSending });
-          return { ...t, task: taskForSending.task };
-        } else return t;
+    if (!task.sum) {
+      const taskValue = this.form.value.task;
+      const taskForSending: Task = {
+        ...task,
+        task: taskValue,
+      };
+      this.taskService.changeTask(taskForSending).subscribe(() => {
+        this.idChange = '';
+        this.form.reset();
+        this.tasks = this.tasks.map((t) => {
+          if (t.id === task.id) {
+            return { ...t, task: taskForSending.task };
+          } else return t;
+        });
       });
-    });
+    }
+    if (task.sum && task.amount && task.totalSum) {
+      const { task: newTask, price, amount } = this.formShopping.value;
+      const taskForSending: Task = {
+        ...task,
+        task: newTask,
+        sum: price,
+        amount: amount,
+        totalSum: amount * price,
+      };
+      this.taskService.changeTask(taskForSending).subscribe(() => {
+        this.idChange = '';
+        this.formShopping.reset();
+        this.formShopping.controls['amount'].reset(1);
+        this.tasks = this.tasks.map((t) => {
+          if (t.id === task.id) {
+            return {
+              ...t,
+              task: taskForSending.task,
+              sum: taskForSending.sum,
+              amount: taskForSending.amount,
+              totalSum: taskForSending.totalSum,
+            };
+          } else return t;
+        });
+      });
+      if (task.totalSum && taskForSending.totalSum) {
+        this.totalSum = this.totalSum - task.totalSum + taskForSending.totalSum;
+      }
+    }
   }
 
   cancel() {
@@ -134,7 +161,7 @@ export class OrganizerComponent {
 
   onSubmitShop() {
     const { task, price, amount } = this.formShopping.value;
-    const titalSum = price * amount;
+    const totalSum = price * amount;
 
     const taskForSending: Task = {
       task,
@@ -142,12 +169,11 @@ export class OrganizerComponent {
       isDone: false,
       sum: price,
       amount: amount,
-      totalSum: titalSum,
+      totalSum: totalSum,
     };
 
     this.taskService.generateTask(taskForSending).subscribe(
       (task) => {
-        console.log('shop');
         this.tasks.push(task), this.formShopping.reset();
         this.formShopping.controls['amount'].reset(1);
         this.taskService.getAll().subscribe((res) => (this.dates = res));

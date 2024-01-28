@@ -129,12 +129,34 @@
               </div>
 
               <ng-template #showInput>
-                <form (ngSubmit)="onSubmitChange(task)" [formGroup]="form">
-                  <input
-                    type="text"
-                    [defaultValue]="task.task"
-                    formControlName="task"
-                  />
+                <form
+                  (ngSubmit)="onSubmitChange(task)"
+                  [formGroup]="formShopping"
+                >
+                  <label for="task">
+                    New product name
+                    <input
+                      type="text"
+                      [defaultValue]="task.task"
+                      formControlName="task"
+                    />
+                  </label>
+                  <label for="price">
+                    New price
+                    <input
+                      type="text"
+                      [defaultValue]="task.sum"
+                      formControlName="price"
+                    />
+                  </label>
+                  <label for="amount">
+                    New amount
+                    <input
+                      type="text"
+                      [defaultValue]="task.amount"
+                      formControlName="amount"
+                    />
+                  </label>
 
                   <button class="btn btn-secondary w100">Change</button>
                 </form>
