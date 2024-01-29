@@ -52,10 +52,14 @@ export class OrganizerComponent {
   taskCakendar: Task[] = [];
 
   formShopping: FormGroup = new FormGroup({
-    task: new FormControl('', Validators.required),
+    task: new FormControl(null, Validators.required),
     price: new FormControl('', Validators.required),
     amount: new FormControl(1, Validators.required),
   });
+
+  clearInput() {
+    this.formShopping.controls['amount'].reset('');
+  }
 
   toggleAmountInput() {
     this.isOpened = !this.isOpened;

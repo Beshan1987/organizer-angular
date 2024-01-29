@@ -5,10 +5,23 @@ section {
   }
   .wrapper {
     margin-top: 10px;
-    border: 1px solid black;
+    // border: 1px solid black;
     padding: 0 5px;
     border-radius: 5px;
     margin-bottom: 10px;
+
+    .btnClose {
+      display: flex;
+      align-self: flex-start;
+      button {
+        background-color: red;
+        width: 50px;
+      }
+      mat-icon {
+        margin: 0;
+        color: white;
+      }
+    }
     .sumContainer {
       display: flex;
       justify-content: center;
@@ -25,13 +38,15 @@ section {
     margin-right: 10px;
   }
   .task {
+    border: 1px solid black;
+    padding: 10px;
+    border-bottom: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 0;
-    // border: 1px solid #000;
-    // margin-bottom: 0.5rem;
+    position: relative;
     flex-wrap: wrap;
+
     .buttonWrapper {
       display: flex;
       align-items: center;

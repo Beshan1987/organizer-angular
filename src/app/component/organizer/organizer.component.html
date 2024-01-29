@@ -16,15 +16,13 @@
               <div class="taskWrapper">
                 <span>{{ i + 1 }}. </span>
 
-                <div (click)="toggleTask(task.id)">
-                  <div *ngIf="idChange !== task.id; else showInput">
-                    <span [class.done]="task.isDone">{{ task.task }}</span>
-                    <span [class.done]="task.isDone">{{ task.task }}</span>
-                    <div *ngIf="task.isDone">
-                      <span class="material-symbols-outlined doneIcon">
-                        Done
-                      </span>
-                    </div>
+                <div *ngIf="idChange !== task.id; else showInput">
+                  <span [class.done]="task.isDone">{{ task.task }}</span>
+                  <span [class.done]="task.isDone">{{ task.task }}</span>
+                  <div *ngIf="task.isDone">
+                    <span class="material-symbols-outlined doneIcon">
+                      Done
+                    </span>
                   </div>
                 </div>
               </div>
@@ -40,12 +38,18 @@
                   <button class="btn btn-secondary w100">Change</button>
                 </form>
               </ng-template>
-              <div *ngIf="idChange === task.id">
-                <button class="btn btn-primary" (click)="cancel()">
-                  Cancel changes
-                </button>
+              <div *ngIf="idChange === task.id" class="btnClose">
+                <span class="material-symbols-outlined" (click)="cancel()">
+                  close
+                </span>
               </div>
               <div *ngIf="idChange !== task.id" class="buttonWrapper">
+                <span
+                  class="material-symbols-outlined"
+                  (click)="toggleTask(task.id)"
+                >
+                  settings
+                </span>
                 <button
                   mat-raised-button
                   color="primary"
@@ -65,6 +69,9 @@
               </div>
             </div>
           </li>
+          <span class="sumContainer">
+            <b style="color: #673ab7">&nbsp; &nbsp;</b>
+          </span>
         </ul>
         <ng-template #noTasks>
           <p class="noTaskContainer">No tasks yet...</p>
@@ -93,36 +100,35 @@
               <div class="taskWrapper">
                 <span>{{ i + 1 }}. </span>
 
-                <div (click)="toggleTask(task.id)">
-                  <div
-                    *ngIf="idChange !== task.id; else showInput"
-                    class="taskShop"
-                  >
-                    <span [class.done]="task.isDone"
-                      >{{ task.task
-                      }}<b
-                        *ngIf="task.amount && task.amount > 1"
-                        style="color: #673ab7"
-                      >
-                        {{ task.sum }} BYN (X{{ task.amount }})</b
-                      ></span
+                <div
+                  *ngIf="idChange !== task.id; else showInput"
+                  class="taskShop"
+                >
+                  <span [class.done]="task.isDone"
+                    >{{ task.task
+                    }}<b
+                      *ngIf="task.amount && task.amount > 1"
+                      style="color: #673ab7"
                     >
+                      {{ task.sum }} BYN (X{{ task.amount }})</b
+                    ></span
+                  >
+                  <span [class.done]="task.isDone">
+                    <b
+                      *ngIf="task.totalSum; else elseSum"
+                      style="color: #673ab7"
+                      >{{ task.totalSum }}</b
+                    >
+                    BYN</span
+                  >
+                  <ng-template #elseSum>
                     <span [class.done]="task.isDone">
-                      <b
-                        *ngIf="task.totalSum; else elseSum"
-                        style="color: #673ab7"
-                        >{{ task.totalSum }}</b
-                      >
+                      <b style="color: #673ab7">{{ task.sum }}</b>
                       BYN</span
                     >
-                    <ng-template #elseSum>
-                      <span [class.done]="task.isDone">
-                        <b style="color: #673ab7">{{ task.sum }}</b>
-                        BYN</span
-                      >
-                    </ng-template>
-                  </div>
+                  </ng-template>
                 </div>
+
                 <div *ngIf="task.isDone">
                   <span class="material-symbols-outlined doneIcon"> Done </span>
                 </div>
@@ -137,36 +143,44 @@
                     New product name
                     <input
                       type="text"
-                      [defaultValue]="task.task"
+                      [value]="task.task"
                       formControlName="task"
                     />
                   </label>
                   <label for="price">
                     New price
                     <input
-                      type="text"
-                      [defaultValue]="task.sum"
+                      type="number"
+                      [value]="task.sum"
                       formControlName="price"
                     />
                   </label>
                   <label for="amount">
                     New amount
                     <input
-                      type="text"
+                      type="number"
                       [defaultValue]="task.amount"
                       formControlName="amount"
+                      (focus)="clearInput()"
                     />
                   </label>
 
                   <button class="btn btn-secondary w100">Change</button>
                 </form>
               </ng-template>
-              <div *ngIf="idChange === task.id">
-                <button class="btn btn-primary" (click)="cancel()">
-                  Cancel changes
-                </button>
+              <div *ngIf="idChange === task.id" class="btnClose">
+                <span class="material-symbols-outlined" (click)="cancel()">
+                  close
+                </span>
               </div>
               <div *ngIf="idChange !== task.id" class="buttonWrapper">
+                <span
+                  class="material-symbols-outlined"
+                  (click)="toggleTask(task.id)"
+                >
+                  settings
+                </span>
+
                 <button
                   [disabled]="task.isDone"
                   mat-raised-button
